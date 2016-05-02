@@ -9,6 +9,7 @@
 #import "RTCICECandidate.h"
 #import "RTCMediaStream.h"
 #import "RTCTypes.h"
+#import "RTCDataChannel.h"
 
 @class RTCICEServer;
 
@@ -23,13 +24,14 @@
 - (instancetype)initWithVideoDevice:(AVCaptureDevice *)device;
 - (instancetype)initWithVideo:(BOOL)allowVideo;
 
-- (void)addPeerConnectionForID:(NSString *)identifier;
+- (void)addPeerConnectionForID:(NSString *)identifier caller: (BOOL)isCaller;
 - (void)removePeerConnectionForID:(NSString *)identifier;
 
 - (void)createOfferForPeerWithID:(NSString *)peerID;
 - (void)setRemoteDescription:(RTCSessionDescription *)remoteSDP forPeerWithID:(NSString *)peerID receiver:(BOOL)isReceiver;
 - (void)addICECandidate:(RTCICECandidate *)candidate forPeerWithID:(NSString *)peerID;
 
+- (void)sendMessage:(NSData*)messageData successHandler:(void (^)(void))successHandler errorHandler:(void (^)(NSString*))errorHandler;
 // Add a STUN or TURN server, adding a STUN server replaces the previous STUN server, adding a TURN server appends it to the list
 - (void)addICEServer:(RTCICEServer *)server;
 
@@ -49,5 +51,6 @@
 
 - (void)webRTC:(TLKWebRTC *)webRTC addedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID;
 - (void)webRTC:(TLKWebRTC *)webRTC removedStream:(RTCMediaStream *)stream forPeerWithID:(NSString *)peerID;
-
+- (void)webRTC:(TLKWebRTC *)webRTC onMessage:(NSString *)messageText;
+- (void)webRTC:(TLKWebRTC *)webRTC onDataChannelOpen:(RTCDataChannel *) channel;
 @end
